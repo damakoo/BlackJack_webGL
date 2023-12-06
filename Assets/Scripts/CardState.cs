@@ -6,7 +6,7 @@ using TMPro;
 [RequireComponent(typeof(Renderer))]
 public class CardState : MonoBehaviour
 {
-    public bool isOpen;// { get; set; }
+    //public bool isOpen;// { get; set; }
     public int Number;// { get; set; }
     public bool MyCard;
     GameObject thisgameobject;
@@ -16,7 +16,7 @@ public class CardState : MonoBehaviour
     {
         MyCard = _myCard;
         thisrenderer = GetComponent<Renderer>();
-        isOpen = false;
+        //isOpen = false;
         thisgameobject = _thisgameobject;
         thistextMeshPro = thisgameobject.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         thistextMeshPro.text = "13";
@@ -25,13 +25,13 @@ public class CardState : MonoBehaviour
 
     public void Open()
     {
-        isOpen = true;
+        //isOpen = true;
         thistextMeshPro.text = Number.ToString();
         thisrenderer.material.color = Color.white;
     }
     public void Close()
     {
-        isOpen = false;
+        //isOpen = false;
         thistextMeshPro.text = "";
         thisrenderer.material.color = Color.gray;
     }

@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BlackJackRecorder : MonoBehaviour
 {
+    [SerializeField] PracticeSet _PracticeSet;
     [SerializeField] CSVWriter _CSVWriter;
     public List<int> MyNumberList { get; set; } = new List<int>();
     public List<int> YourNumberList { get; set; } = new List<int>();
     public List<int> ScoreList { get; set; } = new List<int>();
-    private List<List<int>> MyCardsPracticeList => PracticeSet.MyCardsPracticeList;
-    private List<List<int>> YourCardsPracticeList => PracticeSet.YourCardsPracticeList;
-    private List<int> FieldCardsPracticeList => PracticeSet.FieldCardsPracticeList;
-    private int TrialAll => PracticeSet.TrialAll;
+    private List<List<int>> MyCardsPracticeList => _PracticeSet.MyCardsPracticeList;
+    private List<List<int>> YourCardsPracticeList => _PracticeSet.YourCardsPracticeList;
+    private List<int> FieldCardsPracticeList => _PracticeSet.FieldCardsPracticeList;
+    private int TrialAll => _PracticeSet.TrialAll;
 
     public void RecordResult(int mynumber, int yournumber, int score)
     {

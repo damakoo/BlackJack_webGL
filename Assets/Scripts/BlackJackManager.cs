@@ -9,18 +9,12 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] int TimeLimit;
     [SerializeField] int ShowMyCardsTime = 10;
     [SerializeField] GameObject FinishUI;
-    [SerializeField] BlackJackRecorder _blackJackRecorder;
+    //[SerializeField] BlackJackRecorder _blackJackRecorder;
     [SerializeField] TextMeshProUGUI MyScoreUI;
     [SerializeField] TextMeshProUGUI YourScoreUI;
-    private enum BlackJackState
-    {
-        BeforeStart,
-        WaitForNextTrial,
-        ShowMyCards,
-        SelectCards,
-        ShowResult,
-        Finished,
-    }
+
+    PracticeSet _PracticeSet;
+
     public enum HostorClient
     {
         Host,
@@ -33,73 +27,87 @@ public class BlackJackManager : MonoBehaviour
         Time
     }
     [SerializeField] HowShowCard _HowShowCard;
-    BlackJackState _nowstate = BlackJackState.BeforeStart;
     int nowTrial = 0;
     float nowTime = 0;
-    private CardState MySelectedCard;
-    private CardState YourSelectedCard;
     private int Score = 0;
+    public bool hasPracticeSet { get; set; } = false;
     // Start is called before the first frame update
     void Start()
     {
         FinishUI.SetActive(false);
-        PracticeSet.UpdateParameter();
-        _cardslist.InitializeCards();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_nowstate == BlackJackState.BeforeStart)
+        if (hasPracticeSet)
         {
-            if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
-        }
-        else if (_nowstate == BlackJackState.WaitForNextTrial)
-        {
-            //if (Input.GetKeyDown(KeyCode.Space)) MoveToShowMyCards();
-            nowTime += Time.deltaTime;
-            if (nowTime > ShowMyCardsTime)
+
+            if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.BeforeStart)
             {
-                nowTime = 0;
-                MoveToShowMyCards();
+                if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
             }
-        }
-        else if (_nowstate == BlackJackState.ShowMyCards)
-        {
-            if(_HowShowCard == HowShowCard.KeyBoard)
+            else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.WaitForNextTrial)
             {
-                if (Input.GetKeyDown(KeyCode.Space)) MoveToSelectCards();
-            }
-            else if(_HowShowCard == HowShowCard.Time)
-            {
+                //if (Input.GetKeyDown(KeyCode.Space)) MoveToShowMyCards();
                 nowTime += Time.deltaTime;
                 if (nowTime > ShowMyCardsTime)
                 {
                     nowTime = 0;
-                    MoveToSelectCards();
+                    MoveToShowMyCards();
                 }
             }
-
-        }
-        else if (_nowstate == BlackJackState.SelectCards)
-        {
-            nowTime += Time.deltaTime;
-            BlackJacking();
-            if (nowTime > TimeLimit) MoveToShowResult();
-        }
-        else if (_nowstate == BlackJackState.ShowResult)
-        {
-            //if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
-            nowTime += Time.deltaTime;
-            if (nowTime > ShowMyCardsTime)
+            else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.ShowMyCards)
             {
-                nowTime = 0;
-                MoveToWaitForNextTrial();
+                if (_HowShowCard == HowShowCard.KeyBoard)
+                {
+                    if (Input.GetKeyDown(KeyCode.Space)) MoveToSelectCards();
+                }
+                else if (_HowShowCard == HowShowCard.Time)
+                {
+                    nowTime += Time.deltaTime;
+                    if (nowTime > ShowMyCardsTime)
+                    {
+                        nowTime = 0;
+                        MoveToSelectCards();
+                    }
+                }
+
+            }
+            else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectCards)
+            {
+                nowTime += Time.deltaTime;
+                BlackJacking();
+                if (nowTime > TimeLimit) MoveToShowResult();
+            }
+            else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.ShowResult)
+            {
+                //if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
+                nowTime += Time.deltaTime;
+                if (nowTime > ShowMyCardsTime)
+                {
+                    nowTime = 0;
+                    MoveToWaitForNextTrial();
+                }
             }
         }
     }
-    
+    public void SetPracticeSet(PracticeSet _practiceset)
+    {
+        _PracticeSet = _practiceset;
+        _cardslist.SetPracticeSet(_practiceset);
+        hasPracticeSet = true;
+    }
 
+
+    public void UpdateParameter()
+    {
+        _PracticeSet.UpdateParameter();
+    }
+    public void InitializeCard()
+    {
+        _cardslist.InitializeCards();
+    }
     void BlackJacking()
     {
         // �}�E�X�{�^�����N���b�N���ꂽ���m�F
@@ -115,15 +123,15 @@ public class BlackJackManager : MonoBehaviour
                 {
                     if (thisCard.MyCard)
                     {
-                        MySelectedCard.UnClicked();
-                        MySelectedCard = thisCard;
-                        MySelectedCard.Clicked();
+                        _PracticeSet.MySelectedCard.UnClicked();
+                        _PracticeSet.MySelectedCard = thisCard;
+                        _PracticeSet.MySelectedCard.Clicked();
                     }
                     else
                     {
-                        YourSelectedCard.UnClicked();
-                        YourSelectedCard = thisCard;
-                        YourSelectedCard.Clicked();
+                        _PracticeSet.YourSelectedCard.UnClicked();
+                        _PracticeSet.YourSelectedCard = thisCard;
+                        _PracticeSet.YourSelectedCard.Clicked();
                     }
                 }
             }
@@ -133,52 +141,53 @@ public class BlackJackManager : MonoBehaviour
     void MoveToShowMyCards()
     {
         _cardslist.MyCardsOpen();
-        _nowstate = BlackJackState.ShowMyCards;
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowMyCards;
     }
     void MoveToSelectCards()
     {
         _cardslist.AllOpen();
-        _nowstate = BlackJackState.SelectCards;
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.SelectCards;
 
     }
     void MoveToShowResult()
     {
-        MySelectedCard.Clicked();
-        YourSelectedCard.Clicked();
+        _PracticeSet.MySelectedCard.Clicked();
+        _PracticeSet.YourSelectedCard.Clicked();
         foreach (var card in _cardslist.MyCardsList_opponent)
         {
-            if (card.Number == YourSelectedCard.Number) card.Clicked();
+            if (card.Number == _PracticeSet.YourSelectedCard.Number) card.Clicked();
         }
         foreach (var card in _cardslist.YourCardsList_opponent)
         {
-            if (card.Number == MySelectedCard.Number) card.Clicked();
+            if (card.Number == _PracticeSet.MySelectedCard.Number) card.Clicked();
         }
         Score = CalculateResult();
-        _blackJackRecorder.RecordResult(MySelectedCard.Number,YourSelectedCard.Number,Score);
-        _nowstate = BlackJackState.ShowResult;
+        //_blackJackRecorder.RecordResult(_PracticeSet.MySelectedCard.Number, _PracticeSet.YourSelectedCard.Number,Score);
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
         MyScoreUI.text = Score.ToString();
         YourScoreUI.text = Score.ToString();
         nowTime = 0;
         nowTrial += 1;
-        if(nowTrial == PracticeSet.TrialAll)
+        if(nowTrial == _PracticeSet.TrialAll)
         {
-            _nowstate = BlackJackState.Finished;
+            _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;
             FinishUI.SetActive(true);
-            _blackJackRecorder.WriteResult();
+            //_blackJackRecorder.WriteResult();
         }
     }
     void MoveToWaitForNextTrial()
     {
         _cardslist.AllClose();
-        _nowstate = BlackJackState.WaitForNextTrial;
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.WaitForNextTrial;
         _cardslist.SetCards(nowTrial);
         MyScoreUI.text = "";
         YourScoreUI.text = "";
-        MySelectedCard = _cardslist.MyCardsList[0];
-        YourSelectedCard = _cardslist.YourCardsList[0];
+        _PracticeSet.MySelectedCard = _cardslist.MyCardsList[0];
+        _PracticeSet.YourSelectedCard = _cardslist.YourCardsList[0];
     }
     private int CalculateResult()
     {
-        return (MySelectedCard.Number + YourSelectedCard.Number + PracticeSet.FieldCardsPracticeList[nowTrial] > 21)?0:MySelectedCard.Number + YourSelectedCard.Number + PracticeSet.FieldCardsPracticeList[nowTrial];
+        return (_PracticeSet.MySelectedCard.Number + _PracticeSet.YourSelectedCard.Number + _PracticeSet.FieldCardsPracticeList[nowTrial] > 21)?0: _PracticeSet.MySelectedCard.Number + _PracticeSet.YourSelectedCard.Number + _PracticeSet.FieldCardsPracticeList[nowTrial];
     }
+
 }

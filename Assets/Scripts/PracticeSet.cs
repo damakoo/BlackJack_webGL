@@ -1,35 +1,168 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Photon.Pun;
 
 
-public static class PracticeSet
+public class PracticeSet:MonoBehaviour
 {
-    public static List<List<int>> MyCardsPracticeList = new List<List<int>>();
-    public static List<List<int>> YourCardsPracticeList = new List<List<int>>();
-    public static List<int> FieldCardsPracticeList = new List<int>();
+    BlackJackManager _BlackJackManager;
+    private PhotonView _PhotonView;
+    public CardState MySelectedCard { get; set; }
+    public CardState YourSelectedCard { get; set; }
+    public void SetMySelectedCard(CardState card)
+    {
+        MySelectedCard = card;
+        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card.Number,card.MyCard);
+    }
+    [PunRPC]
+    void UpdateMySelectedCardOnAllClients(int _Number, bool _MyCard)
+    {
+        // ここでカードデータを再構築
+        CardState newCardState = new CardState { Number = _Number, MyCard = _MyCard };
+    }
+    public void SetYourSelectedCard(CardState card)
+    {
+        YourSelectedCard = card;
+        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card.Number, card.MyCard);
+    }
+    [PunRPC]
+    void UpdateYourSelectedCardOnAllClients(int _Number, bool _MyCard)
+    {
+        // ここでカードデータを再構築
+        CardState newCardState = new CardState { Number = _Number, MyCard = _MyCard };
+    }
+    public List<List<int>> MyCardsPracticeList /*{ get; set; }*/ = new List<List<int>>();
+    public List<List<int>> YourCardsPracticeList { get; set; } = new List<List<int>>();
+    public List<int> FieldCardsPracticeList { get; set; } = new List<int>();
+    public void SetMyCardsPracticeList(List<List<int>> _MyCardsPracticeList)
+    {
+        MyCardsPracticeList = _MyCardsPracticeList;
+        _PhotonView.RPC("UpdateMyCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsPracticeList));
+    }
+    [PunRPC]
+    void UpdateMyCardsPracticeListOnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        MyCardsPracticeList = DeserializeCardList(serializeCards);
+    }
+    public void SetYourCardsPracticeList(List<List<int>> _YourCardsPracticeList)
+    {
+        YourCardsPracticeList = _YourCardsPracticeList;
+        _PhotonView.RPC("UpdateYourCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsPracticeList));
+    }
+    [PunRPC]
+    void UpdateYourCardsPracticeListOnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        YourCardsPracticeList = DeserializeCardList(serializeCards);
+    }
+    public void SetFieldCardsList(List<int> _FieldCardsPracticeList)
+    {
+        FieldCardsPracticeList = _FieldCardsPracticeList;
+        _PhotonView.RPC("UpdateFieldCardsPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsPracticeList));
+    }
+    [PunRPC]
+    void UpdateFieldCardsPracticeListOnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        FieldCardsPracticeList = DeserializeFieldCard(serializeCards);
+    }
 
-    public static int TrialAll;
-    public static int NumberofCards = 5;
+    private string SerializeCardList(List<List<int>> cards)
+    {
+        return JsonUtility.ToJson(new SerializationWrapper<List<List<int>>>(cards));
+    }
+
+    private List<List<int>> DeserializeCardList(string serializedCards)
+    {
+        return JsonUtility.FromJson<SerializationWrapper<List<List<int>>>>(serializedCards).data;
+    }
+
+    private string SerializeFieldCard(List<int> cards)
+    {
+        return JsonUtility.ToJson(new SerializationWrapper<List<int>>(cards));
+    }
+
+    private List<int> DeserializeFieldCard(string serializedCards)
+    {
+        return JsonUtility.FromJson<SerializationWrapper<List<int>>>(serializedCards).data;
+    }
+
+    [System.Serializable]
+    private class SerializationWrapper<T>
+    {
+        public T data;
+
+        public SerializationWrapper(T data)
+        {
+            this.data = data;
+        }
+    }
+
+    public enum BlackJackStateList
+    {
+        BeforeStart,
+        WaitForNextTrial,
+        ShowMyCards,
+        SelectCards,
+        ShowResult,
+        Finished,
+    }
+    public BlackJackStateList BlackJackState = BlackJackStateList.BeforeStart;
+
+    public void SetBlackJackState(BlackJackStateList _BlackJackState)
+    {
+        BlackJackState = _BlackJackState;
+        _PhotonView.RPC("UpdateBlackJackStateListOnAllClients", RpcTarget.Others, SerializeBlackJackState(_BlackJackState));
+    }
+    [PunRPC]
+    void UpdateBlackJackStateListOnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        BlackJackState = DeserializeBlackJackState(serializeCards);
+    }
+
+    private string SerializeBlackJackState(BlackJackStateList _BlackJackState)
+    {
+        return JsonUtility.ToJson(new SerializationWrapper<BlackJackStateList>(_BlackJackState));
+    }
+
+    private BlackJackStateList DeserializeBlackJackState(string serializedCards)
+    {
+        return JsonUtility.FromJson<SerializationWrapper<BlackJackStateList>>(serializedCards).data;
+    }
+
+    public int TrialAll;
+    public int NumberofCards = 5;
 
 
-    public static int NumberofSet = 10;
-    static int FieldCards = 0;
+    public int NumberofSet = 10;
+    int FieldCards = 0;
 
-    static List<int> MyCards;
-    static List<int> YourCards;
-    public static void UpdateParameter()
+    List<int> MyCards;
+    List<int> YourCards;
+    private void Start()
+    {
+        _PhotonView = GetComponent<PhotonView>();
+        _BlackJackManager = GameObject.FindWithTag("Manager").GetComponent<BlackJackManager>();
+    }
+    public void UpdateParameter()
     {
         for (int i = 0; i < NumberofSet; i++)
         {
-                DecidingCards(Random.Range(0,NumberofCards));
-                FieldCardsPracticeList.Add(FieldCards);
-                MyCardsPracticeList.Add(MyCards);
-                YourCardsPracticeList.Add(YourCards);
-        }       
+            DecidingCards(Random.Range(0,NumberofCards));
+            FieldCardsPracticeList.Add(FieldCards);
+            MyCardsPracticeList.Add(MyCards);
+            YourCardsPracticeList.Add(YourCards);
+        }
+        SetMyCardsPracticeList(MyCardsPracticeList);
+        SetYourCardsPracticeList(YourCardsPracticeList);
+        SetFieldCardsList(FieldCardsPracticeList);
+        _BlackJackManager.InitializeCard();
     }
 
-    static void DecidingCards(int _j)
+    void DecidingCards(int _j)
     {
         DecideCards(_j);
         while (CheckmorethanfourCards())
@@ -38,7 +171,7 @@ public static class PracticeSet
         }
     }
 
-    static void DecideCards(int _j)
+    void DecideCards(int _j)
     {
         MyCards = new List<int>();
         YourCards = new List<int>();
@@ -74,7 +207,7 @@ public static class PracticeSet
         }
         ShuffleCards();
     }
-    static bool CheckmorethanfourCards()
+    bool CheckmorethanfourCards()
     {
         bool Result = false;
         for (int k = 1; k < 14; k++)
@@ -87,7 +220,7 @@ public static class PracticeSet
         }
         return Result;
     }
-    static bool ValidityCheck(int _targetSum, int card, List<int> _MyCard)
+    bool ValidityCheck(int _targetSum, int card, List<int> _MyCard)
     {
         bool Result = false;
         if (_targetSum <= card) Result = true;
@@ -95,7 +228,7 @@ public static class PracticeSet
         foreach (var eachcard in _MyCard) if (eachcard == card) Result = true;
         return Result;
     }
-    static bool ValidityCheck_remaining(int _targetSum, int mycard, int yourcard, List<int> _MyCard, List<int> _YourCard)
+    bool ValidityCheck_remaining(int _targetSum, int mycard, int yourcard, List<int> _MyCard, List<int> _YourCard)
     {
         bool Result = false;
         if (mycard + yourcard == _targetSum) Result = true;
@@ -103,7 +236,7 @@ public static class PracticeSet
         foreach (var eachcard in _MyCard) if (yourcard + eachcard == _targetSum) Result = true;
         return Result;
     }
-    static void ShuffleCards()
+    void ShuffleCards()
     {
         for (int i = 0; i < MyCards.Count; i++)
         {
