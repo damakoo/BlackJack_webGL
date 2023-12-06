@@ -246,7 +246,7 @@ public class BlackJackManager : MonoBehaviour
     }
     private int CalculateResult()
     {
-        return (_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number + _cardslist.YourCardsList[_PracticeSet.MySelectedCard].Number + _PracticeSet.FieldCardsPracticeList[nowTrial] > 21)?0: _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number + _cardslist.YourCardsList[_PracticeSet.MySelectedCard].Number + _PracticeSet.FieldCardsPracticeList[nowTrial];
+        return (_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number + _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number + _PracticeSet.FieldCardsPracticeList[nowTrial] > 21)?0: _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number + _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number + _PracticeSet.FieldCardsPracticeList[nowTrial];
     }
     public void MakeReadyHost()
     {
