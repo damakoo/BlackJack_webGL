@@ -14,19 +14,26 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI YourScoreUI;
     private enum BlackJackState
     {
+        BeforeStart,
         WaitForNextTrial,
         ShowMyCards,
         SelectCards,
         ShowResult,
         Finished,
     }
+    public enum HostorClient
+    {
+        Host,
+        Client
+    }
+    public HostorClient _hostorclient;
     private enum HowShowCard
     {
         KeyBoard,
         Time
     }
     [SerializeField] HowShowCard _HowShowCard;
-    BlackJackState _nowstate = BlackJackState.WaitForNextTrial;
+    BlackJackState _nowstate = BlackJackState.BeforeStart;
     int nowTrial = 0;
     float nowTime = 0;
     private CardState MySelectedCard;
@@ -38,16 +45,24 @@ public class BlackJackManager : MonoBehaviour
         FinishUI.SetActive(false);
         PracticeSet.UpdateParameter();
         _cardslist.InitializeCards();
-        MoveToWaitForNextTrial();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (_nowstate == BlackJackState.WaitForNextTrial)
+        if (_nowstate == BlackJackState.BeforeStart)
         {
-            if (Input.GetKeyDown(KeyCode.Space)) MoveToShowMyCards();
+            if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
+        }
+        else if (_nowstate == BlackJackState.WaitForNextTrial)
+        {
+            //if (Input.GetKeyDown(KeyCode.Space)) MoveToShowMyCards();
+            nowTime += Time.deltaTime;
+            if (nowTime > ShowMyCardsTime)
+            {
+                nowTime = 0;
+                MoveToShowMyCards();
+            }
         }
         else if (_nowstate == BlackJackState.ShowMyCards)
         {
@@ -74,20 +89,26 @@ public class BlackJackManager : MonoBehaviour
         }
         else if (_nowstate == BlackJackState.ShowResult)
         {
-            if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
+            //if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
+            nowTime += Time.deltaTime;
+            if (nowTime > ShowMyCardsTime)
+            {
+                nowTime = 0;
+                MoveToWaitForNextTrial();
+            }
         }
     }
     
 
     void BlackJacking()
     {
-        // ƒ}ƒEƒXƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚©Šm”F
+        // ï¿½}ï¿½Eï¿½Xï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½mï¿½F
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 rayPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero);
 
-            // ƒŒƒCƒLƒƒƒXƒg‚ğg—p‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ğŒŸo
+            // ï¿½ï¿½ï¿½Cï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ÄƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½o
             if (hit && hit.collider.gameObject.CompareTag("Card"))
             {
                 if (hit.collider.gameObject.TryGetComponent<CardState>(out CardState thisCard))
