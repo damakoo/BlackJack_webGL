@@ -10,11 +10,10 @@ public static class PracticeSet
     public static List<int> FieldCardsPracticeList = new List<int>();
 
     public static int TrialAll;
-    public static int NumberofCards;
+    public static int NumberofCards = 5;
 
 
     public static int NumberofSet = 10;
-    public static int NumberofMyCard = 5;
     static int FieldCards = 0;
 
     static List<int> MyCards;
@@ -23,7 +22,7 @@ public static class PracticeSet
     {
         for (int i = 0; i < NumberofSet; i++)
         {
-                DecidingCards(Random.Range(0,NumberofMyCard));
+                DecidingCards(Random.Range(0,NumberofCards));
                 FieldCardsPracticeList.Add(FieldCards);
                 MyCardsPracticeList.Add(MyCards);
                 YourCardsPracticeList.Add(YourCards);
@@ -58,9 +57,9 @@ public static class PracticeSet
                 YourCards.Add(_targetSum - card);
             }
         }
-        if (_j < NumberofMyCard)
+        if (_j < NumberofCards)
         {
-            for (int i = 0; i < NumberofMyCard - _j; i++)
+            for (int i = 0; i < NumberofCards - _j; i++)
             {
                 int mycard = UnityEngine.Random.Range(1, 14);
                 int yourcard = UnityEngine.Random.Range(1, 14);

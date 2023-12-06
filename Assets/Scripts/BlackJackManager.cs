@@ -6,7 +6,6 @@ using TMPro;
 public class BlackJackManager : MonoBehaviour
 {
     [SerializeField] CardsList _cardslist;
-    [SerializeField] string filename;
     [SerializeField] int TimeLimit;
     [SerializeField] int ShowMyCardsTime = 10;
     [SerializeField] GameObject FinishUI;
@@ -37,7 +36,7 @@ public class BlackJackManager : MonoBehaviour
     void Start()
     {
         FinishUI.SetActive(false);
-        PracticeSet.UpdateParameter(Application.dataPath + "/StreamingAssets/" + filename + ".csv");
+        PracticeSet.UpdateParameter();
         _cardslist.InitializeCards();
         MoveToWaitForNextTrial();
     }
