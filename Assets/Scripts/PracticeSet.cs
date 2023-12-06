@@ -11,28 +11,114 @@ public static class PracticeSet
 
     public static int TrialAll;
     public static int NumberofCards;
-    public static void UpdateParameter(string _filepath)
+
+
+    public static int NumberofSet = 10;
+    public static int NumberofMyCard = 5;
+    static int FieldCards = 0;
+
+    static List<int> MyCards;
+    static List<int> YourCards;
+    public static void UpdateParameter()
     {
-
-        // CSVファイルを全ての行で読み込む
-        string[] lines = File.ReadAllLines(_filepath);
-
-        TrialAll = lines.Length - 1;
-        NumberofCards = (lines[0].Split(',').Length - 1) / 2;
-        
-        for (int i = 0; i < TrialAll; i++)
+        for (int i = 0; i < NumberofSet; i++)
         {
-            string[] columns = lines[i + 1].Split(',');
-            FieldCardsPracticeList.Add(int.Parse(columns[0]));
-            List<int> MyCardsList0 = new List<int>();
-            List<int> YourCardsList0 = new List<int>();
-            for (int j = 0; j < NumberofCards; j++)
+                DecidingCards(Random.Range(0,NumberofMyCard));
+                FieldCardsPracticeList.Add(FieldCards);
+                MyCardsPracticeList.Add(MyCards);
+                YourCardsPracticeList.Add(YourCards);
+        }       
+    }
+
+    static void DecidingCards(int _j)
+    {
+        DecideCards(_j);
+        while (CheckmorethanfourCards())
+        {
+            DecideCards(_j);
+        }
+    }
+
+    static void DecideCards(int _j)
+    {
+        MyCards = new List<int>();
+        YourCards = new List<int>();
+        FieldCards = UnityEngine.Random.Range(1, 14);
+        int _targetSum = 21 - FieldCards;
+        if (_j > 0)
+        {
+            for (int i = 0; i < _j; i++)
             {
-                MyCardsList0.Add(int.Parse(columns[j+1]));
-                YourCardsList0.Add(int.Parse(columns[j+1+NumberofCards]));
+                int card = UnityEngine.Random.Range(1, 14);
+                while (ValidityCheck(_targetSum, card, MyCards))
+                {
+                    card = UnityEngine.Random.Range(1, 14);
+                }
+                MyCards.Add(card);
+                YourCards.Add(_targetSum - card);
             }
-            MyCardsPracticeList.Add(MyCardsList0);
-            YourCardsPracticeList.Add(YourCardsList0);
+        }
+        if (_j < NumberofMyCard)
+        {
+            for (int i = 0; i < NumberofMyCard - _j; i++)
+            {
+                int mycard = UnityEngine.Random.Range(1, 14);
+                int yourcard = UnityEngine.Random.Range(1, 14);
+                while (ValidityCheck_remaining(_targetSum, mycard, yourcard, MyCards, YourCards))
+                {
+                    mycard = UnityEngine.Random.Range(1, 14);
+                    yourcard = UnityEngine.Random.Range(1, 14);
+                }
+                MyCards.Add(mycard);
+                YourCards.Add(yourcard);
+            }
+        }
+        ShuffleCards();
+    }
+    static bool CheckmorethanfourCards()
+    {
+        bool Result = false;
+        for (int k = 1; k < 14; k++)
+        {
+            int number = 0;
+            if (FieldCards == k) number++;
+            foreach (var i in MyCards) if (i == k) number++;
+            foreach (var i in YourCards) if (i == k) number++;
+            if (number > 4) Result = true;
+        }
+        return Result;
+    }
+    static bool ValidityCheck(int _targetSum, int card, List<int> _MyCard)
+    {
+        bool Result = false;
+        if (_targetSum <= card) Result = true;
+        if (_targetSum - card > 13) Result = true;
+        foreach (var eachcard in _MyCard) if (eachcard == card) Result = true;
+        return Result;
+    }
+    static bool ValidityCheck_remaining(int _targetSum, int mycard, int yourcard, List<int> _MyCard, List<int> _YourCard)
+    {
+        bool Result = false;
+        if (mycard + yourcard == _targetSum) Result = true;
+        //foreach (var eachcard in _MyCard) if (eachcard == mycard) Result = true;
+        foreach (var eachcard in _MyCard) if (yourcard + eachcard == _targetSum) Result = true;
+        return Result;
+    }
+    static void ShuffleCards()
+    {
+        for (int i = 0; i < MyCards.Count; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(i, MyCards.Count);
+            int temp = MyCards[i];
+            MyCards[i] = MyCards[randomIndex];
+            MyCards[randomIndex] = temp;
+        }
+        for (int i = 0; i < YourCards.Count; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(i, YourCards.Count);
+            int temp = YourCards[i];
+            YourCards[i] = YourCards[randomIndex];
+            YourCards[randomIndex] = temp;
         }
     }
 }
