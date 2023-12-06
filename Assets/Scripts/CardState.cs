@@ -9,17 +9,19 @@ public class CardState : MonoBehaviour
     //public bool isOpen;// { get; set; }
     public int Number;// { get; set; }
     public bool MyCard;
+    public int ID { get; set; }
     GameObject thisgameobject;
     Renderer thisrenderer;
     TextMeshProUGUI thistextMeshPro;
-    public CardState Initialize(GameObject _thisgameobject, bool _myCard)
+    public CardState Initialize(GameObject _thisgameobject, bool _myCard, int _ID)
     {
         MyCard = _myCard;
         thisrenderer = GetComponent<Renderer>();
         //isOpen = false;
         thisgameobject = _thisgameobject;
         thistextMeshPro = thisgameobject.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        thistextMeshPro.text = "13";
+        ID = _ID;
+        Close();
         return this;
     }
 

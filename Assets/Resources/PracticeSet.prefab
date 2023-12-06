@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2385453104751281697}
   m_Layer: 0
   m_Name: PracticeSet
-  m_TagString: Untagged
+  m_TagString: PhotonView
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028f8569a16ca4d3cb86065c27401682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _BlackJackManager: {fileID: 0}
+  MySelectedCard: 0
+  YourSelectedCard: 0
+  FieldCardsPracticeList: 
   BlackJackState: 0
   TrialAll: 5
   NumberofCards: 5

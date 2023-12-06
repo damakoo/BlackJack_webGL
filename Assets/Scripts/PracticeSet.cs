@@ -1,42 +1,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Text.RegularExpressions;
+using UnityEditor;
+using UnityEngine.Windows;
+using System.Collections;
 
 
 public class PracticeSet: MonoBehaviourPunCallbacks
 {
     BlackJackManager _BlackJackManager;
     private PhotonView _PhotonView;
-    public CardState MySelectedCard { get; set; }
-    public CardState YourSelectedCard { get; set; }
-    public void SetMySelectedCard(CardState card)
+    public int MySelectedCard;// { get; set; }
+    public int YourSelectedCard;// { get; set; }
+    public void SetMySelectedCard(int card)
     {
         MySelectedCard = card;
-        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card.Number,card.MyCard);
+        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card);
     }
     [PunRPC]
-    void UpdateMySelectedCardOnAllClients(int _Number, bool _MyCard)
+    void UpdateMySelectedCardOnAllClients(int _Number)
     {
         // ここでカードデータを再構築
-        CardState newCardState = new CardState { Number = _Number, MyCard = _MyCard };
+        MySelectedCard = _Number;
     }
-    public void SetYourSelectedCard(CardState card)
+    public void SetYourSelectedCard(int card)
     {
         YourSelectedCard = card;
-        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card.Number, card.MyCard);
+        _PhotonView.RPC("UpdateYourSelectedCardOnAllClients", RpcTarget.Others, card);
     }
     [PunRPC]
-    void UpdateYourSelectedCardOnAllClients(int _Number, bool _MyCard)
+    void UpdateYourSelectedCardOnAllClients(int _Number)
     {
         // ここでカードデータを再構築
-        CardState newCardState = new CardState { Number = _Number, MyCard = _MyCard };
+        YourSelectedCard = _Number;
     }
-    public List<List<int>> MyCardsPracticeList /*{ get; set; }*/ = new List<List<int>>();
+    public List<List<int>> MyCardsPracticeList { get; set; } = new List<List<int>>();
     public List<List<int>> YourCardsPracticeList { get; set; } = new List<List<int>>();
-    public List<int> FieldCardsPracticeList { get; set; } = new List<int>();
+    public List<int> FieldCardsPracticeList /*{ get; set; }*/ = new List<int>();
     public void SetMyCardsPracticeList(List<List<int>> _MyCardsPracticeList)
     {
-        MyCardsPracticeList = _MyCardsPracticeList;
+        List<List<int>> temp = _MyCardsPracticeList;
+        MyCardsPracticeList = temp;
         _PhotonView.RPC("UpdateMyCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsPracticeList));
     }
     [PunRPC]
@@ -47,7 +52,8 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     }
     public void SetYourCardsPracticeList(List<List<int>> _YourCardsPracticeList)
     {
-        YourCardsPracticeList = _YourCardsPracticeList;
+        List<List<int>> temp = _YourCardsPracticeList;
+        YourCardsPracticeList = temp;
         _PhotonView.RPC("UpdateYourCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsPracticeList));
     }
     [PunRPC]
@@ -58,7 +64,8 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     }
     public void SetFieldCardsList(List<int> _FieldCardsPracticeList)
     {
-        FieldCardsPracticeList = _FieldCardsPracticeList;
+        List<int> temp = FieldCardsPracticeList;
+        FieldCardsPracticeList = temp;
         _PhotonView.RPC("UpdateFieldCardsPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsPracticeList));
     }
     [PunRPC]
@@ -70,22 +77,55 @@ public class PracticeSet: MonoBehaviourPunCallbacks
 
     private string SerializeCardList(List<List<int>> cards)
     {
-        return JsonUtility.ToJson(new SerializationWrapper<List<List<int>>>(cards));
+
+        string cards_json = "[";
+        for (int i = 0; i < cards.Count; i++)
+        {
+            cards_json += JsonHelper.ToJson(cards[i]) + ",";
+        }
+        cards_json = cards_json.Remove(cards_json.Length - 1);
+        cards_json += "]";
+        return cards_json;
     }
 
-    private List<List<int>> DeserializeCardList(string serializedCards)
+    private List<List<int>> DeserializeCardList(string json)
     {
-        return JsonUtility.FromJson<SerializationWrapper<List<List<int>>>>(serializedCards).data;
+        Regex regex = new Regex(@"\d+");
+
+        List<int> numbers = new List<int>();
+        foreach (Match match in regex.Matches(json))
+        {
+            numbers.Add(int.Parse(match.Value));
+        }
+        List<List<int>> cardList = new List<List<int>>();
+        // JSON 文字列を int[] の配列に変換
+        for(int i = 0; i<NumberofSet; i++)
+        {
+            List<int> Element = new List<int>();
+            for(int j = 0; j < NumberofCards; j++)
+            {
+                Element.Add(numbers[i*NumberofCards + j]);
+            }
+            cardList.Add(Element);
+        }
+        return cardList;
     }
 
     private string SerializeFieldCard(List<int> cards)
     {
-        return JsonUtility.ToJson(new SerializationWrapper<List<int>>(cards));
+        return JsonHelper.ToJson(cards);
     }
 
     private List<int> DeserializeFieldCard(string serializedCards)
     {
-        return JsonUtility.FromJson<SerializationWrapper<List<int>>>(serializedCards).data;
+        Regex regex = new Regex(@"\d+");
+
+        List<int> numbers = new List<int>();
+        foreach (Match match in regex.Matches(serializedCards))
+        {
+            numbers.Add(int.Parse(match.Value));
+        }        
+        return numbers;
     }
 
     [System.Serializable]
@@ -158,6 +198,17 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         SetMyCardsPracticeList(MyCardsPracticeList);
         SetYourCardsPracticeList(YourCardsPracticeList);
         SetFieldCardsList(FieldCardsPracticeList);
+        InitializeCard();
+    }
+    public void InitializeCard()
+    {
+        _BlackJackManager.InitializeCard();
+        _PhotonView.RPC("RPCInitializeCard", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCInitializeCard()
+    {
+        // ここでカードデータを再構築
         _BlackJackManager.InitializeCard();
     }
 
@@ -251,5 +302,74 @@ public class PracticeSet: MonoBehaviourPunCallbacks
             YourCards[i] = YourCards[randomIndex];
             YourCards[randomIndex] = temp;
         }
+    }
+
+    public void MoveToWaitForNextTrial(int _nowTrial)
+    {
+        _BlackJackManager.MoveToWaitForNextTrial(_nowTrial);
+        _PhotonView.RPC("RPCMoveToWaitForNextTrial", RpcTarget.Others, _nowTrial);
+    }
+    [PunRPC]
+    void RPCMoveToWaitForNextTrial(int _nowTrial)
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MoveToWaitForNextTrial(_nowTrial);
+    }
+
+    public void MoveToShowMyCards(int hostorClient)
+    {
+        _BlackJackManager.MoveToShowMyCards(0);
+        _PhotonView.RPC("RPCMoveToShowMyCards", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMoveToShowMyCards()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MoveToShowMyCards(1);
+    }
+    
+    public void MoveToSelectCards()
+    {
+        _BlackJackManager.MoveToSelectCards();
+        _PhotonView.RPC("RPCMoveToSelectCards", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMoveToSelectCards()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MoveToSelectCards();
+    }
+    public void MoveToShowResult()
+    {
+        _BlackJackManager.MoveToShowResult();
+        _PhotonView.RPC("RPCMoveToShowResult", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMoveToShowResult()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MoveToShowResult();
+    }
+    public void MakeReadyHost()
+    {
+       _BlackJackManager.MakeReadyHost();
+        _PhotonView.RPC("RPCMakeReadyHost", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMakeReadyHost()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MakeReadyHost();
+    }
+    public void MakeReadyClient()
+    {
+        _BlackJackManager.MakeReadyClient();
+        _PhotonView.RPC("RPCMakeReadyClient", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMakeReadyClient()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MakeReadyClient();
     }
 }

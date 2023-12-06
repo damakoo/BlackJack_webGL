@@ -45,6 +45,13 @@ MonoBehaviour:
   - UpdateMySelectedCardOnAllClients
   - UpdateYourCardsPracticeListOnAllClients
   - UpdateYourSelectedCardOnAllClients
+  - RPCMoveToSelectCards
+  - RPCMoveToShowMyCards
+  - RPCMoveToShowResult
+  - RPCMoveToWaitForNextTrial
+  - RPCInitializeCard
+  - RPCMakeReadyClient
+  - RPCMakeReadyHost
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
