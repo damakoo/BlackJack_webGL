@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using Photon.Pun;
 
 
-public class PracticeSet:MonoBehaviour
+public class PracticeSet: MonoBehaviourPunCallbacks
 {
     BlackJackManager _BlackJackManager;
     private PhotonView _PhotonView;
