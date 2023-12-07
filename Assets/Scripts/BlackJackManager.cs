@@ -11,14 +11,15 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] int ShowMyCardsTime = 5;
     [SerializeField] int ResultsTime = 5;
     [SerializeField] int WaitingTime = 3;
-    [SerializeField] GameObject FinishUI;
+    [SerializeField] TextMeshProUGUI FinishUI;
     //[SerializeField] BlackJackRecorder _blackJackRecorder;
     [SerializeField] TextMeshProUGUI MyScoreUI;
     [SerializeField] DecideHostorClient _decideHostorClient;
     [SerializeField] GameObject StartingUi;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
-
     PracticeSet _PracticeSet;
+    private List<int> MaxScoreList = new List<int>();
+    private List<int> ScoreList = new List<int>();
 
     public enum HostorClient
     {
@@ -39,7 +40,7 @@ public class BlackJackManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FinishUI.SetActive(false);
+        FinishUI.text = "";
     }
 
     // Update is called once per frame
@@ -214,14 +215,16 @@ public class BlackJackManager : MonoBehaviour
         Score = CalculateResult();
         //_blackJackRecorder.RecordResult(_PracticeSet.MySelectedCard.Number, _PracticeSet.YourSelectedCard.Number,Score);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
-        MyScoreUI.text = CalculateScorewithSuit();//Score.ToString();
+        MyScoreUI.text = CalculateScorewithSuit();//*/Score.ToString();
+        ScoreList.Add(Score);
+        RecordMaxSuitScore();
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         nowTrial += 1;
         if(nowTrial == _PracticeSet.TrialAll)
         {
             _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;
-            FinishUI.SetActive(true);
+            FinishUI.text = "Finished! \n Score:" + ReturnSum(ScoreList).ToString() + "/" + ReturnSum(MaxScoreList).ToString();
             //_blackJackRecorder.WriteResult();
         }
     }
@@ -281,6 +284,52 @@ public class BlackJackManager : MonoBehaviour
         else
         {
             result += " x 1.0 = " + Score.ToString();
+        }
+        return result;
+    }
+    private void RecordMaxScore()
+    {
+        int MaxScore = 0;
+        for(int i = 0; i< _cardslist.MyCardsList.Count; i++)
+        {
+            for(int j = 0; j < _cardslist.YourCardsList.Count; j++)
+            {
+                int _score = (_cardslist.MyCardsList[i].Number + _cardslist.YourCardsList[j].Number + _PracticeSet.FieldCardsPracticeList[nowTrial] > 21) ? 0 : _cardslist.MyCardsList[i].Number + _cardslist.YourCardsList[j].Number + _PracticeSet.FieldCardsPracticeList[nowTrial];
+                if (MaxScore < _score) MaxScore = _score;
+            }
+        }
+        MaxScoreList.Add(MaxScore);
+    }
+    private void RecordMaxSuitScore()
+    {
+        int MaxScore = 0;
+        for (int i = 0; i < _cardslist.MyCardsList.Count; i++)
+        {
+            for (int j = 0; j < _cardslist.YourCardsList.Count; j++)
+            {
+                int _score = (_cardslist.MyCardsList[i].Number + _cardslist.YourCardsList[j].Number + _PracticeSet.FieldCardsPracticeList[nowTrial] > 21) ? 0 : _cardslist.MyCardsList[i].Number + _cardslist.YourCardsList[j].Number + _PracticeSet.FieldCardsPracticeList[nowTrial];
+                if (_cardslist.MyCardsList[i].suit.GetColor() == _cardslist.YourCardsList[j].suit.GetColor())
+                {
+                    if (_cardslist.MyCardsList[i].suit == _cardslist.YourCardsList[j].suit)
+                    {
+                        _score = (int)Mathf.Ceil(_score * 1.2f);
+                    }
+                    else
+                    {
+                        _score = (int)Mathf.Ceil(Score * 1.1f);
+                    }
+                }
+                if (MaxScore < _score) MaxScore = _score;
+            }
+        }
+        MaxScoreList.Add(MaxScore);
+    }
+    private int ReturnSum(List<int> _list)
+    {
+        int result = 0;
+        foreach(var element in _list)
+        {
+            result += element;
         }
         return result;
     }
