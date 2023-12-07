@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -93,8 +94,11 @@ public class CardsList : MonoBehaviour
         {
             MyCardsList[i].Number = _PracticeSet.MyCardsPracticeList[Trial][i];
             YourCardsList[i].Number = _PracticeSet.YourCardsPracticeList[Trial][i];
+            MyCardsList[i].suit = (Suit)Enum.ToObject(typeof(Suit), _PracticeSet.MyCardsSuitPracticeList[Trial][i]);
+            YourCardsList[i].suit = (Suit)Enum.ToObject(typeof(Suit), _PracticeSet.YourCardsSuitPracticeList[Trial][i]);
         }
         MyFieldCard.Number = _PracticeSet.FieldCardsPracticeList[Trial];
+        MyFieldCard.suit = (Suit)Enum.ToObject(typeof(Suit), _PracticeSet.FieldCardsSuitPracticeList[Trial]);
         //YourFieldCard.Number = _PracticeSet.FieldCardsPracticeList[Trial];
     }
 

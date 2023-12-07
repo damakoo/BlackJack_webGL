@@ -214,7 +214,7 @@ public class BlackJackManager : MonoBehaviour
         Score = CalculateResult();
         //_blackJackRecorder.RecordResult(_PracticeSet.MySelectedCard.Number, _PracticeSet.YourSelectedCard.Number,Score);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
-        MyScoreUI.text = Score.ToString();
+        MyScoreUI.text = CalculateScorewithSuit();//Score.ToString();
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         nowTrial += 1;
@@ -263,5 +263,25 @@ public class BlackJackManager : MonoBehaviour
     public void PhotonMakeReadyClient()
     {
         _PracticeSet.MakeReadyClient();
+    }
+    private string CalculateScorewithSuit()
+    {
+        string result = Score.ToString();
+        if (_cardslist.MyCardsList[_PracticeSet.MySelectedCard].suit.GetColor() == _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].suit.GetColor())
+        {
+            if(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].suit == _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].suit)
+            {
+                result += " x 1.2 = " + Mathf.Ceil(Score * 1.2f).ToString();
+            }
+            else
+            {
+                result += " x 1.1 = " + Mathf.Ceil(Score * 1.1f).ToString();
+            }
+        }
+        else
+        {
+            result += " x 1.0 = " + Score.ToString();
+        }
+        return result;
     }
 }

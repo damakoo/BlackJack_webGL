@@ -48,6 +48,7 @@ MonoBehaviour:
   MySelectedCard: 0
   YourSelectedCard: 0
   FieldCardsPracticeList: 
+  FieldCardsSuitPracticeList: 
   BlackJackState: 0
   TrialAll: 5
   NumberofCards: 5

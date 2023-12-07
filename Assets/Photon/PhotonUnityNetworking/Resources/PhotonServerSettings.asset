@@ -52,6 +52,9 @@ MonoBehaviour:
   - RPCInitializeCard
   - RPCMakeReadyClient
   - RPCMakeReadyHost
+  - UpdateFieldCardsSuitPracticeListOnAllClients
+  - UpdateMyCardsSuitPracticeListOnAllClients
+  - UpdateYourCardsSuitPracticeListOnAllClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
