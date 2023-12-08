@@ -250,11 +250,12 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     }
     private int RandomValue()
     {
-        int result = Random.Range(0, 5);
+        int result = Random.Range(0, 4);
         while(result == 1)
         {
-            result = Random.Range(0, 5);
+            result = Random.Range(0, 4);
         }
+        Debug.Log(result);
         return result;
     }
     public void InitializeCard()

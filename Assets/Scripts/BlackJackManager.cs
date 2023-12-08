@@ -215,9 +215,9 @@ public class BlackJackManager : MonoBehaviour
         Score = CalculateResult();
         //_blackJackRecorder.RecordResult(_PracticeSet.MySelectedCard.Number, _PracticeSet.YourSelectedCard.Number,Score);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
-        MyScoreUI.text = CalculateScorewithSuit();//*/Score.ToString();
+        MyScoreUI.text = /*CalculateScorewithSuit();//*/Score.ToString();
         ScoreList.Add(Score);
-        RecordMaxSuitScore();
+        RecordMaxScore();
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         nowTrial += 1;
