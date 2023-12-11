@@ -637,12 +637,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d47b190b0d2245679d4ff878fb09be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useSuit: 0
   _cardslist: {fileID: 603039267}
   TimeLimit: 5
   ShowMyCardsTime: 5
   ResultsTime: 5
   WaitingTime: 3
   FinishUI: {fileID: 1642538915}
+  _blackJackRecorder: {fileID: 670548090}
   MyScoreUI: {fileID: 2129073161}
   _decideHostorClient: {fileID: 329302854}
   StartingUi: {fileID: 1090798328}
@@ -693,7 +695,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 670548092}
-  - component: {fileID: 670548091}
   - component: {fileID: 670548090}
   m_Layer: 0
   m_Name: BlackJackRecorder
@@ -701,7 +702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &670548090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,21 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f772cd9ddf7bb548ae3f8fac500eda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PracticeSet: {fileID: 0}
-  _CSVWriter: {fileID: 670548091}
---- !u!114 &670548091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 670548089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc5dc457b68144bb7869449b6fe52247, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filename: Result
+  _BlackJackManager: {fileID: 603039265}
 --- !u!4 &670548092
 Transform:
   m_ObjectHideFlags: 0

@@ -272,10 +272,10 @@ public class PracticeSet: MonoBehaviourPunCallbacks
 
     void DecidingCards(int _j)
     {
-        DecideCards(_j);
+        DecideRandomCards();
         while (CheckDoubleCard())
         {
-            DecideCards(_j);
+            DecideRandomCards();
         }
     }
 
@@ -319,6 +319,23 @@ public class PracticeSet: MonoBehaviourPunCallbacks
                 MyCardsSuit.Add(UnityEngine.Random.Range(0, 4));
                 YourCardsSuit.Add(UnityEngine.Random.Range(0, 4));
             }
+        }
+        ShuffleCards();
+    }
+    void DecideRandomCards()
+    {
+        MyCards = new List<int>();
+        YourCards = new List<int>();
+        MyCardsSuit = new List<int>();
+        YourCardsSuit = new List<int>();
+        for (int i = 0; i < 5; i++)
+        {
+            FieldCards = UnityEngine.Random.Range(1, 14);
+            FieldCardsSuit = UnityEngine.Random.Range(0, 4);
+            MyCards.Add(UnityEngine.Random.Range(1, 14));
+            YourCards.Add(UnityEngine.Random.Range(1, 14));
+            MyCardsSuit.Add(UnityEngine.Random.Range(0, 4));
+            YourCardsSuit.Add(UnityEngine.Random.Range(0, 4));
         }
         ShuffleCards();
     }

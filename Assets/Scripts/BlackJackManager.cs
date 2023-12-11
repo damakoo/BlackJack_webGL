@@ -6,18 +6,19 @@ using static BlackJackManager;
 
 public class BlackJackManager : MonoBehaviour
 {
+    [SerializeField] bool useSuit = false;
     [SerializeField] CardsList _cardslist;
     [SerializeField] int TimeLimit;
     [SerializeField] int ShowMyCardsTime = 5;
     [SerializeField] int ResultsTime = 5;
     [SerializeField] int WaitingTime = 3;
     [SerializeField] TextMeshProUGUI FinishUI;
-    //[SerializeField] BlackJackRecorder _blackJackRecorder;
+    [SerializeField] BlackJackRecorder _blackJackRecorder;
     [SerializeField] TextMeshProUGUI MyScoreUI;
     [SerializeField] DecideHostorClient _decideHostorClient;
     [SerializeField] GameObject StartingUi;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
-    PracticeSet _PracticeSet;
+    public PracticeSet _PracticeSet { get; set; }
     private List<int> MaxScoreList = new List<int>();
     private List<int> ScoreList = new List<int>();
 
@@ -213,11 +214,18 @@ public class BlackJackManager : MonoBehaviour
             if (card.Number == _PracticeSet.MySelectedCard.Number) card.Clicked();
         }*/
         Score = CalculateResult();
-        //_blackJackRecorder.RecordResult(_PracticeSet.MySelectedCard.Number, _PracticeSet.YourSelectedCard.Number,Score);
+        _blackJackRecorder.RecordResult(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number, _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number, (useSuit) ? Score:CalculateSuitScore());
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
-        MyScoreUI.text = /*CalculateScorewithSuit();//*/Score.ToString();
+        MyScoreUI.text = (useSuit)?CalculateScorewithSuit():Score.ToString();
         ScoreList.Add(Score);
-        RecordMaxScore();
+        if (useSuit)
+        {
+            RecordMaxSuitScore();
+        }
+        else
+        {
+            RecordMaxScore();
+        }
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         nowTrial += 1;
@@ -226,6 +234,7 @@ public class BlackJackManager : MonoBehaviour
             _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;
             FinishUI.text = "Finished! \n Score:" + ReturnSum(ScoreList).ToString() + "/" + ReturnSum(MaxScoreList).ToString();
             //_blackJackRecorder.WriteResult();
+            _blackJackRecorder.ExportCsv();
         }
     }
     public void PhotonMoveToShowResult()
@@ -286,6 +295,24 @@ public class BlackJackManager : MonoBehaviour
             result += " x 1.0 = " + Score.ToString();
         }
         return result;
+    }
+    private int CalculateSuitScore()
+    {
+        if (_cardslist.MyCardsList[_PracticeSet.MySelectedCard].suit.GetColor() == _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].suit.GetColor())
+        {
+            if (_cardslist.MyCardsList[_PracticeSet.MySelectedCard].suit == _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].suit)
+            {
+                return (int)Mathf.Ceil(Score * 1.2f);
+            }
+            else
+            {
+                return (int)Mathf.Ceil(Score * 1.1f);
+            }
+        }
+        else
+        {
+            return Score;
+        }
     }
     private void RecordMaxScore()
     {
