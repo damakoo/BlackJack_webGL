@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d47b190b0d2245679d4ff878fb09be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useSuit: 0
+  useSuit: 1
   _cardslist: {fileID: 603039267}
   TimeLimit: 5
   ShowMyCardsTime: 5

@@ -214,7 +214,7 @@ public class BlackJackManager : MonoBehaviour
             if (card.Number == _PracticeSet.MySelectedCard.Number) card.Clicked();
         }*/
         Score = CalculateResult();
-        _blackJackRecorder.RecordResult(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number, _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number, (useSuit) ? Score:CalculateSuitScore());
+        _blackJackRecorder.RecordResult(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number, _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number, (useSuit) ? CalculateSuitScore(): Score);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
         MyScoreUI.text = (useSuit)?CalculateScorewithSuit():Score.ToString();
         ScoreList.Add(Score);
