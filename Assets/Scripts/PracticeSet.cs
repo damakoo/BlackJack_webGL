@@ -328,12 +328,15 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         YourCards = new List<int>();
         MyCardsSuit = new List<int>();
         YourCardsSuit = new List<int>();
+        FieldCards = UnityEngine.Random.Range(1, 14);
+        //FieldCards = 6;
+        FieldCardsSuit = UnityEngine.Random.Range(0, 4);
         for (int i = 0; i < 5; i++)
         {
-            FieldCards = UnityEngine.Random.Range(1, 14);
-            FieldCardsSuit = UnityEngine.Random.Range(0, 4);
             MyCards.Add(UnityEngine.Random.Range(1, 14));
             YourCards.Add(UnityEngine.Random.Range(1, 14));
+            //MyCards.Add(i + 6);
+            //YourCards.Add(i + 5);
             MyCardsSuit.Add(UnityEngine.Random.Range(0, 4));
             YourCardsSuit.Add(UnityEngine.Random.Range(0, 4));
         }
