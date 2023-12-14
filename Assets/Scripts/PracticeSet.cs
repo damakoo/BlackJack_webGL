@@ -9,8 +9,32 @@ public class PracticeSet: MonoBehaviourPunCallbacks
 {
     BlackJackManager _BlackJackManager;
     private PhotonView _PhotonView;
-    public int MySelectedCard;// { get; set; }
-    public int YourSelectedCard;// { get; set; }
+    public int MySelectedCard { get; set; }
+    public int YourSelectedCard { get; set; }
+    public List<float> MySelectedTime { get; set; }
+    public List<float> YourSelectedTime { get; set; }
+    public void SetMySelectedTime(float time, int trial)
+    {
+        MySelectedTime[trial] = time;
+        _PhotonView.RPC("UpdateMySelectedTimeOnAllClients", RpcTarget.Others, time, trial);
+    }
+    [PunRPC]
+    void UpdateMySelectedTimeOnAllClients(float time, int trial)
+    {
+        // ここでカードデータを再構築
+        MySelectedTime[trial] = time;
+    }
+    public void SetYourSelectedTime(float time, int trial)
+    {
+        YourSelectedTime[trial] = time;
+        _PhotonView.RPC("UpdateYourSelectedTimeOnAllClients", RpcTarget.Others, time, trial);
+    }
+    [PunRPC]
+    void UpdateYourSelectedTimeOnAllClients(float time, int trial)
+    {
+        // ここでカードデータを再構築
+        YourSelectedTime[trial] = time;
+    }
     public void SetMySelectedCard(int card)
     {
         MySelectedCard = card;

@@ -77,6 +77,13 @@ public class CardsList : MonoBehaviour
         GameObject myfieldcard = Instantiate(CardPrefab, MyFieldCardtransform.position, Quaternion.identity, CardsListParent.transform);
         myfieldcard.name = "MyFieldCard";
         MyFieldCard = myfieldcard.AddComponent<CardState>().Initialize(myfieldcard, false, 0);
+        _PracticeSet.MySelectedTime = new List<float>();
+        _PracticeSet.YourSelectedTime = new List<float>();
+        for (int i = 0; i < _PracticeSet.NumberofSet; i++)
+        {
+            _PracticeSet.MySelectedTime.Add(0);
+            _PracticeSet.YourSelectedTime.Add(0);
+        }
 
         //GameObject yourfieldcard = Instantiate(CardPrefab, YourFieldCardtransform.position, Quaternion.Euler(new Vector3(0, 0, 90)), CardsListParent.transform);
         //yourfieldcard.name = "YourFieldCard";
