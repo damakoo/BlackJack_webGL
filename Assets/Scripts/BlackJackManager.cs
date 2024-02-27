@@ -292,6 +292,7 @@ public class BlackJackManager : MonoBehaviour
     public void MoveToShowResult()
     {
         CardListObject.SetActive(true);
+        BetUi.SetActive(false);
         _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Clicked();
         _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Clicked();
         
@@ -325,6 +326,8 @@ public class BlackJackManager : MonoBehaviour
             FinishUI.text = "Finished! \n Score:" + ReturnSum(ScoreList).ToString() + "/" + ReturnSum(MaxScoreList).ToString();
             //_blackJackRecorder.WriteResult();
             _blackJackRecorder.ExportCsv();
+            if (_hostorclient == HostorClient.Host) _SceneReloaderHost.SetActive(true);
+            if (_hostorclient == HostorClient.Client) _SceneReloaderClient.SetActive(true);
         }
     }
     public void PhotonMoveToShowResult()

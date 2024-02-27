@@ -57,6 +57,11 @@ MonoBehaviour:
   - UpdateYourCardsSuitPracticeListOnAllClients
   - UpdateMySelectedTimeOnAllClients
   - UpdateYourSelectedTimeOnAllClients
+  - RPCMoveToSelectBet
+  - RPCReInitializeCard
+  - RPCRestart
+  - UpdateMySelectedBetOnAllClients
+  - UpdateYourSelectedBetOnAllClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
