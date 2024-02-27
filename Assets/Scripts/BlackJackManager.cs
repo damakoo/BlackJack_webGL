@@ -12,11 +12,18 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] int ShowMyCardsTime = 5;
     [SerializeField] int ResultsTime = 5;
     [SerializeField] int WaitingTime = 3;
+    [SerializeField] int BetTime = 4;
     [SerializeField] TextMeshProUGUI FinishUI;
     [SerializeField] BlackJackRecorder _blackJackRecorder;
     [SerializeField] TextMeshProUGUI MyScoreUI;
+    [SerializeField] GameObject ClientUi;
+    [SerializeField] GameObject BetUi;
+    [SerializeField] GameObject CardListObject;
     [SerializeField] DecideHostorClient _decideHostorClient;
     [SerializeField] GameObject StartingUi;
+    [SerializeField] GameObject _SceneReloaderHost;
+    [SerializeField] GameObject _SceneReloaderClient;
+    [SerializeField] List<TextMeshProUGUI> BetUiChild;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
     public PracticeSet _PracticeSet { get; set; }
     private List<int> MaxScoreList = new List<int>();
@@ -87,7 +94,13 @@ public class BlackJackManager : MonoBehaviour
                 {
                     nowTime += Time.deltaTime;
                     BlackJacking();
-                    if (nowTime > TimeLimit) PhotonMoveToShowResult();
+                    if (nowTime > TimeLimit) PhotonMoveToSelectBet();
+                }
+                else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectBet)
+                {
+                    nowTime += Time.deltaTime;
+                    SelectBetting();
+                    if (nowTime > BetTime) PhotonMoveToShowResult();
                 }
                 else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.ShowResult)
                 {
@@ -104,6 +117,10 @@ public class BlackJackManager : MonoBehaviour
             {
                 nowTime += Time.deltaTime;
                 BlackJacking();
+            }
+            else if (_hostorclient == HostorClient.Client && _PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectBet)
+            {
+                SelectBetting();
             }
             else if (_hostorclient == HostorClient.Client)
             {
@@ -123,9 +140,17 @@ public class BlackJackManager : MonoBehaviour
     {
         _PracticeSet.UpdateParameter();
     }
+    public void ReUpdateParameter()
+    {
+        _PracticeSet.ReUpdateParameter();
+    }
     public void InitializeCard()
     {
         _cardslist.InitializeCards();
+    }
+    public void ReInitializeCard()
+    {
+        _cardslist.ReInitializeCards();
     }
     void BlackJacking()
     {
@@ -157,6 +182,49 @@ public class BlackJackManager : MonoBehaviour
                             thisCard.Clicked();
                         }
                     }
+                }
+            }
+        }
+    }
+    void SelectBetting()
+    {
+        // �}�E�X�{�^�����N���b�N���ꂽ���m�F
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 rayPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero);
+
+            // ���C�L���X�g���g�p���ăI�u�W�F�N�g�����o
+            if (hit && hit.collider.gameObject.CompareTag("Bet"))
+            {
+                TextMeshProUGUI textMesh;
+                if (hit.collider.gameObject.TryGetComponent<TextMeshProUGUI>(out textMesh))
+                {
+                    string text = textMesh.text;
+
+                    // 文字列から数字を抽出してint型に変換
+                    int number;
+                    if (int.TryParse(text, out number))
+                    {
+                        foreach (TextMeshProUGUI child in BetUiChild) child.color = Color.white;
+                        textMesh.color = Color.yellow;
+                        if (_hostorclient == HostorClient.Host)
+                        {
+                            _PracticeSet.SetMySelectedBet(number);
+                        }
+                        else if (_hostorclient == HostorClient.Client)
+                        {
+                            _PracticeSet.SetYourSelectedBet(number);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("文字列に数字が含まれていません。");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("TextMeshProUGUIコンポーネントが見つかりませんでした。");
                 }
             }
         }
@@ -198,6 +266,20 @@ public class BlackJackManager : MonoBehaviour
     {
         _PracticeSet.MoveToShowMyCards((int)_hostorclient);
     }
+    public void PhotonMoveToSelectBet()
+    {
+        _PracticeSet.MoveToSelectBet();
+    }
+    public void MoveToSelectBet()
+    {
+        _PracticeSet.MySelectedBet = 0;
+        _PracticeSet.YourSelectedBet = 0;
+        CardListObject.SetActive(false);
+        BetUi.SetActive(true);
+        foreach (TextMeshProUGUI child in BetUiChild) child.color = Color.white;
+        nowTime = 0;
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.SelectBet;
+    }
     public void MoveToSelectCards()
     {
         _cardslist.AllOpen();
@@ -209,6 +291,7 @@ public class BlackJackManager : MonoBehaviour
     }
     public void MoveToShowResult()
     {
+        CardListObject.SetActive(true);
         _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Clicked();
         _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Clicked();
         
@@ -221,7 +304,7 @@ public class BlackJackManager : MonoBehaviour
             if (card.Number == _PracticeSet.MySelectedCard.Number) card.Clicked();
         }*/
         Score = CalculateResult();
-        _blackJackRecorder.RecordResult(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number, _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number, (useSuit) ? CalculateSuitScore(): Score);
+        _blackJackRecorder.RecordResult(_cardslist.MyCardsList[_PracticeSet.MySelectedCard].Number, _cardslist.YourCardsList[_PracticeSet.YourSelectedCard].Number, (useSuit) ? CalculateSuitScore(): Score, _PracticeSet.MySelectedBet, _PracticeSet.YourSelectedBet);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.ShowResult;
         MyScoreUI.text = (useSuit)?CalculateScorewithSuit():Score.ToString();
         ScoreList.Add(Score);
@@ -258,6 +341,7 @@ public class BlackJackManager : MonoBehaviour
         //YourScoreUI.text = "";
         _PracticeSet.MySelectedCard = 0;
         _PracticeSet.YourSelectedCard = 0;
+        SetClientUI(false);
     }
     public void PhotonMoveToWaitForNextTrial(int _nowTrial)
     {
@@ -366,5 +450,36 @@ public class BlackJackManager : MonoBehaviour
             result += element;
         }
         return result;
+    }
+    public void SetClientUI(bool setactive)
+    {
+        ClientUi.SetActive(setactive);
+    }
+    public void PhotonRestart()
+    {
+        ReUpdateParameter();
+        _PracticeSet.Restart();
+    }
+    public void Restart()
+    {
+        _blackJackRecorder.Trial += 1;
+        FinishUI.text = "";
+        _cardslist.AllClose();
+        ScoreList = new List<int>();
+        nowTrial = 0;
+        nowTime = 0;
+        _blackJackRecorder.Initialize();
+        _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.BeforeStart;
+        MyScoreUI.text = "";
+        if (_hostorclient == HostorClient.Host)
+        {
+            GameStartUI();
+            _SceneReloaderHost.SetActive(false);
+        }
+        else if (_hostorclient == HostorClient.Client)
+        {
+            SetClientUI(true);
+            _SceneReloaderClient.SetActive(false);
+        }
     }
 }

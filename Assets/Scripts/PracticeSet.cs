@@ -13,6 +13,30 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public int YourSelectedCard { get; set; }
     public List<float> MySelectedTime { get; set; }
     public List<float> YourSelectedTime { get; set; }
+    public int MySelectedBet { get; set; }
+    public int YourSelectedBet { get; set; }
+    public void SetMySelectedBet(int bet)
+    {
+        MySelectedBet = bet;
+        _PhotonView.RPC("UpdateMySelectedBetOnAllClients", RpcTarget.Others, bet);
+    }
+    [PunRPC]
+    void UpdateMySelectedBetOnAllClients(int bet)
+    {
+        // ここでカードデータを再構築
+        MySelectedBet = bet;
+    }
+    public void SetYourSelectedBet(int bet)
+    {
+        YourSelectedBet = bet;
+        _PhotonView.RPC("UpdateYourSelectedBetOnAllClients", RpcTarget.Others, bet);
+    }
+    [PunRPC]
+    void UpdateYourSelectedBetOnAllClients(int bet)
+    {
+        // ここでカードデータを再構築
+        YourSelectedBet = bet;
+    }
     public void SetMySelectedTime(float time, int trial)
     {
         MySelectedTime[trial] = time;
@@ -207,6 +231,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         WaitForNextTrial,
         ShowMyCards,
         SelectCards,
+        SelectBet,
         ShowResult,
         Finished,
     }
@@ -272,6 +297,33 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         SetFieldCardsSuitList(FieldCardsSuitPracticeList);
         InitializeCard();
     }
+    public void ReUpdateParameter()
+    {
+        FieldCardsPracticeList = new List<int>();
+        MyCardsPracticeList = new List<List<int>>();
+        YourCardsPracticeList = new List<List<int>>();
+        FieldCardsSuitPracticeList = new List<int>();
+        MyCardsSuitPracticeList = new List<List<int>>();
+        YourCardsSuitPracticeList = new List<List<int>>();
+        for (int i = 0; i < NumberofSet; i++)
+        {
+            //DecidingCards(Random.Range(0, NumberofCards));
+            DecidingCards(RandomValue());
+            FieldCardsPracticeList.Add(FieldCards);
+            MyCardsPracticeList.Add(MyCards);
+            YourCardsPracticeList.Add(YourCards);
+            FieldCardsSuitPracticeList.Add(FieldCardsSuit);
+            MyCardsSuitPracticeList.Add(MyCardsSuit);
+            YourCardsSuitPracticeList.Add(YourCardsSuit);
+        }
+        SetMyCardsPracticeList(MyCardsPracticeList);
+        SetYourCardsPracticeList(YourCardsPracticeList);
+        SetFieldCardsList(FieldCardsPracticeList);
+        SetMyCardsSuitPracticeList(MyCardsSuitPracticeList);
+        SetYourCardsSuitPracticeList(YourCardsSuitPracticeList);
+        SetFieldCardsSuitList(FieldCardsSuitPracticeList);
+        ReInitializeCard();
+    }
     private int RandomValue()
     {
         int result = Random.Range(0, 4);
@@ -292,6 +344,17 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         // ここでカードデータを再構築
         _BlackJackManager.InitializeCard();
+    }
+    public void ReInitializeCard()
+    {
+        _BlackJackManager.ReInitializeCard();
+        _PhotonView.RPC("RPCReInitializeCard", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCReInitializeCard()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.ReInitializeCard();
     }
 
     void DecidingCards(int _j)
@@ -470,6 +533,17 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         // ここでカードデータを再構築
         _BlackJackManager.MoveToSelectCards();
     }
+    public void MoveToSelectBet()
+    {
+        _BlackJackManager.MoveToSelectBet();
+        _PhotonView.RPC("RPCMoveToSelectBet", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCMoveToSelectBet()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.MoveToSelectBet();
+    }
     public void MoveToShowResult()
     {
         _BlackJackManager.MoveToShowResult();
@@ -502,5 +576,16 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         // ここでカードデータを再構築
         _BlackJackManager.MakeReadyClient();
+    }
+    public void Restart()
+    {
+        _BlackJackManager.Restart();
+        _PhotonView.RPC("RPCRestart", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCRestart()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.Restart();
     }
 }

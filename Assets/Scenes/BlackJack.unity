@@ -639,10 +639,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSuit: 1
   _cardslist: {fileID: 603039267}
+<<<<<<< HEAD
+  TimeLimit: 8
+  ShowMyCardsTime: 0
+  ResultsTime: 8
+  WaitingTime: 6
+  BetTime: 8
+=======
   TimeLimit: 5
   ShowMyCardsTime: 5
   ResultsTime: 5
   WaitingTime: 3
+>>>>>>> parent of 9ba30e0 (add new ver)
   FinishUI: {fileID: 1642538915}
   _blackJackRecorder: {fileID: 670548090}
   MyScoreUI: {fileID: 2129073161}

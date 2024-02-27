@@ -14,6 +14,8 @@ public class BlackJackRecorder : MonoBehaviour
     //[SerializeField] CSVWriter _CSVWriter;
     public List<int> MyNumberList { get; set; } = new List<int>();
     public List<int> YourNumberList { get; set; } = new List<int>();
+    public List<int> MySelectedBetList { get; set; } = new List<int>();
+    public List<int> YourSelectedBetList { get; set; } = new List<int>();
     public List<int> ScoreList { get; set; } = new List<int>();
     private List<List<int>> MyCardsPracticeList => _PracticeSet.MyCardsPracticeList;
     private List<List<int>> YourCardsPracticeList => _PracticeSet.YourCardsPracticeList;
@@ -21,11 +23,14 @@ public class BlackJackRecorder : MonoBehaviour
     private int TrialAll => _PracticeSet.TrialAll;
     private List<float> MySelectedTime => _PracticeSet.MySelectedTime;
     private List<float> YourSelectedTime => _PracticeSet.YourSelectedTime;
+    public int Trial = 1;
 
-    public void RecordResult(int mynumber, int yournumber, int score)
+    public void RecordResult(int mynumber, int yournumber, int score, int mybet, int yourbet)
     {
         MyNumberList.Add(mynumber);
         YourNumberList.Add(yournumber);
+        MySelectedBetList.Add(mybet);
+        YourSelectedBetList.Add(yourbet);
         ScoreList.Add(score);
     }
     private string _Title;
@@ -39,13 +44,13 @@ public class BlackJackRecorder : MonoBehaviour
         Content += "FieldNumber";
         for (int i = 0; i < MyCardsPracticeList[0].Count; i++) Content += ",MyCards" + (i + 1).ToString();
         for (int i = 0; i < YourCardsPracticeList[0].Count; i++) Content += ",YourCards" + (i + 1).ToString();
-        Content += ",MyNumber,YourNumber,MySelectedTime,YourSelectedTime,Score\n";
+        Content += ",MyNumber,YourNumber,MySelectedTime,YourSelectedTime,MySelectedQuestionnaire,YourSelectedQuestionnaire,Score\n";
         for (int i = 0; i < TrialAll; i++)
         {
             Content += FieldCardsPracticeList[i].ToString();
             for (int j = 0; j < MyCardsPracticeList[i].Count; j++) Content += "," + MyCardsPracticeList[i][j].ToString();
             for (int j = 0; j < YourCardsPracticeList[i].Count; j++) Content += "," + YourCardsPracticeList[i][j].ToString();
-            Content += "," + MyNumberList[i].ToString() + "," + YourNumberList[i].ToString() + "," + MySelectedTime[i].ToString() + "," + YourSelectedTime[i].ToString() + "," + ScoreList[i].ToString() + "\n";
+            Content += "," + MyNumberList[i].ToString() + "," + YourNumberList[i].ToString() + "," + MySelectedTime[i].ToString() + "," + YourSelectedTime[i].ToString() + "," + MySelectedBetList[i].ToString() + "," + YourSelectedBetList[i].ToString() + "," + ScoreList[i].ToString() + "\n";
         }
         return Content;
     }
@@ -70,4 +75,12 @@ public class BlackJackRecorder : MonoBehaviour
         }
         _CSVWriter.WriteCSV(Content);
     }*/
+    public void Initialize()
+    {
+        MyNumberList = new List<int>();
+        YourNumberList = new List<int>();
+        MySelectedBetList = new List<int>();
+        YourSelectedBetList = new List<int>();
+        ScoreList = new List<int>();
+    }
 }
