@@ -56,7 +56,7 @@ public class BlackJackRecorder : MonoBehaviour
     }
     public void ExportCsv()
     {
-        DownloadFile("result_blackjack_" + _Title + ".csv", WriteContent());
+        DownloadFile("result_blackjack_" + _Title + "_" + Trial.ToString() + ".csv", WriteContent());
     }
 
     /*public void WriteResult()
