@@ -62,6 +62,10 @@ MonoBehaviour:
   - RPCRestart
   - UpdateMySelectedBetOnAllClients
   - UpdateYourSelectedBetOnAllClients
+  - UpdateTimeLeftOnAllClients
+  - UpdateClientPressedOnAllClients
+  - UpdateHostPressedOnAllClients
+  - RPCGameStartUi
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

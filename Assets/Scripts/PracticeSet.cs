@@ -15,6 +15,40 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public List<float> YourSelectedTime { get; set; }
     public int MySelectedBet { get; set; }
     public int YourSelectedBet { get; set; }
+    public float TimeLeft { get; set; } = 0;
+    public bool HostPressed { get; set; } = false;
+    public bool ClientPressed { get; set; } = false;
+    public void SetHostPressed(bool _hostpressed)
+    {
+        HostPressed = _hostpressed;
+        _PhotonView.RPC("UpdateHostPressedOnAllClients", RpcTarget.Others, _hostpressed);
+    }
+    [PunRPC]
+    void UpdateHostPressedOnAllClients(bool _hostpressed)
+    {
+        HostPressed = _hostpressed;
+    }
+    public void SetClientPressed(bool _clientpressed)
+    {
+        ClientPressed = _clientpressed;
+        _PhotonView.RPC("UpdateClientPressedOnAllClients", RpcTarget.Others, _clientpressed);
+    }
+    [PunRPC]
+    void UpdateClientPressedOnAllClients(bool _clientpressed)
+    {
+        ClientPressed = _clientpressed;
+    }
+    public void SetTimeLeft(float _timeleft)
+    {
+        TimeLeft = _timeleft;
+        _PhotonView.RPC("UpdateTimeLeftOnAllClients", RpcTarget.Others, _timeleft);
+    }
+    [PunRPC]
+    void UpdateTimeLeftOnAllClients(float _timeleft)
+    {
+        // ここでカードデータを再構築
+        TimeLeft = _timeleft;
+    }
     public void SetMySelectedBet(int bet)
     {
         MySelectedBet = bet;
@@ -587,5 +621,16 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         // ここでカードデータを再構築
         _BlackJackManager.Restart();
+    }
+    public void GameStartUi()
+    {
+        _BlackJackManager.GameStartUI();
+        _PhotonView.RPC("RPCGameStartUi", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCGameStartUi()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.GameStartUI();
     }
 }
