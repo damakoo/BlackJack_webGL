@@ -14,7 +14,7 @@ public class CardPattern : MonoBehaviour
     };
     public static List<List<int>> MyCardPattern = new List<List<int>>()
     {
-        new List<int>(){11,5,9,4,2},
+        new List<int>(){8,5,9,4,2},
         new List<int>(){11,5,13,8,7},
         new List<int>(){3,8,5,9,10},
         new List<int>(){5,4,12,7,9},
@@ -22,7 +22,7 @@ public class CardPattern : MonoBehaviour
     };
     public static List<List<int>> YourCardPattern = new List<List<int>>()
     {
-        new List<int>(){11,5,9,4,2},
+        new List<int>(){8, 5,9,4,2},
         new List<int>(){11,5,13,8,7},
         new List<int>(){3,8,5,9,10},
         new List<int>(){5,4,12,7,9},
