@@ -341,7 +341,7 @@ public class BlackJackManager : MonoBehaviour
     }
     public void MoveToShowResult()
     {
-        _PracticeSet.YourSelectedCard = Random.Range(0,4);
+        _PracticeSet.YourSelectedCard = Random.Range(0,5);
         CardListObject.SetActive(true);
         BetUi.SetActive(false);
         if (_PracticeSet.MySelectedCard != NOTSELCETEDNUMBER) _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Clicked();
