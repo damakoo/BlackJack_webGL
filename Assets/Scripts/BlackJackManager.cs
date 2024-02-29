@@ -14,6 +14,7 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] int ResultsTime = 5;
     [SerializeField] int WaitingTime = 3;
     [SerializeField] int BetTime = 4;
+    [SerializeField] int NumberofSet = 10;
     [SerializeField] TextMeshProUGUI FinishUI;
     [SerializeField] BlackJackRecorder _blackJackRecorder;
     [SerializeField] TextMeshProUGUI MyScoreUI;
@@ -31,7 +32,6 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] GameObject TimeLimit_notBet;
     [SerializeField] GameObject AllTrialFinishedUI;
     [SerializeField] TextMeshProUGUI TimeLimitObj_str;
-    [SerializeField] int NumberofSet = 10;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
     public PracticeSet _PracticeSet { get; set; }
     private List<int> MaxScoreList = new List<int>();
@@ -528,6 +528,7 @@ public class BlackJackManager : MonoBehaviour
     }
     public void Restart()
     {
+        TimeLimitObj_str.text = "";
         MaxScoreList = new List<int>();
         _SceneReloaderClient.SetActive(false);
         _blackJackRecorder.Trial += 1;

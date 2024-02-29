@@ -297,7 +297,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public int NumberofCards = 5;
 
 
-    public int NumberofSet = 10;
+    public int NumberofSet { get; set; } = 5;
     int FieldCards = 0;
 
     List<int> MyCards;
@@ -312,10 +312,12 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     }
     public void UpdateParameter()
     {
+        List<int> _order = GenerateRandomList(1, CardPattern.FieldCardPattern.Count);
         for (int i = 0; i < NumberofSet; i++)
         {
             //DecidingCards(Random.Range(0, NumberofCards));
-            DecidingCards(RandomValue());
+            //DecidingCards(RandomValue());
+            DecideDecidedCards(_order[i]-1);
             FieldCardsPracticeList.Add(FieldCards);
             MyCardsPracticeList.Add(MyCards);
             YourCardsPracticeList.Add(YourCards);
@@ -339,10 +341,13 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         FieldCardsSuitPracticeList = new List<int>();
         MyCardsSuitPracticeList = new List<List<int>>();
         YourCardsSuitPracticeList = new List<List<int>>();
+
+        List<int> _order = GenerateRandomList(1, CardPattern.FieldCardPattern.Count);
         for (int i = 0; i < NumberofSet; i++)
         {
             //DecidingCards(Random.Range(0, NumberofCards));
-            DecidingCards(RandomValue());
+            //DecidingCards(RandomValue());
+            DecideDecidedCards(_order[i]-1);
             FieldCardsPracticeList.Add(FieldCards);
             MyCardsPracticeList.Add(MyCards);
             YourCardsPracticeList.Add(YourCards);
@@ -390,7 +395,15 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         // ここでカードデータを再構築
         _BlackJackManager.ReInitializeCard();
     }
-
+    void DecideDecidedCards(int _order)
+    {
+        MyCards = CardPattern.MyCardPattern[_order];
+        YourCards = CardPattern.YourCardPattern[_order];
+        MyCardsSuit = CardPattern.MyCardPatternSuit[_order];
+        YourCardsSuit = CardPattern.YourCardPatternSuit[_order];
+        FieldCards = CardPattern.FieldCardPattern[_order];
+        FieldCardsSuit = CardPattern.FieldCardPatternSuit[_order];
+    }
     void DecidingCards(int _j)
     {
         DecideRandomCards();
@@ -632,5 +645,27 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         // ここでカードデータを再構築
         _BlackJackManager.GameStartUI();
+    }
+    List<int> GenerateRandomList(int min, int max)
+    {
+        List<int> result = new List<int>();
+        for (int i = min; i <= max; i++)
+        {
+            result.Add(i);
+        }
+
+        // シャッフル
+        int n = result.Count;
+        System.Random rng = new System.Random();
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            int value = result[k];
+            result[k] = result[n];
+            result[n] = value;
+        }
+
+        return result;
     }
 }

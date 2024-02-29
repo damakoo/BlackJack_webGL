@@ -901,7 +901,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5168\u8A66\u884C\u304C\u7D42\u308F\u308A\u307E\u3057\u305F\n\u6307\u793A\u304C\u3042\u308B\u307E\u3067\u305D\u306E\u5834\u3067\u304A\u5F85\u3061\u304F\u3060\u3055\u3044"
+  m_text: "\u5168\u8A66\u884C\u7D42\u4E86\u3067\u3059\n\u6307\u793A\u304C\u3042\u308B\u307E\u3067\n\u304A\u5F85\u3061\u304F\u3060\u3055\u3044"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 080cf609a209d7746b215a69bbf83aff, type: 2}
   m_sharedMaterial: {fileID: 2843272041145637995, guid: 080cf609a209d7746b215a69bbf83aff, type: 2}
@@ -1337,6 +1337,7 @@ MonoBehaviour:
   ResultsTime: 8
   WaitingTime: 6
   BetTime: 8
+  NumberofSet: 10
   FinishUI: {fileID: 1642538915}
   _blackJackRecorder: {fileID: 670548090}
   MyScoreUI: {fileID: 2129073161}
@@ -1361,7 +1362,6 @@ MonoBehaviour:
   TimeLimit_notBet: {fileID: 1567465121}
   AllTrialFinishedUI: {fileID: 502672364}
   TimeLimitObj_str: {fileID: 1550966368}
-  NumberofSet: 10
   _HowShowCard: 1
 --- !u!4 &603039266
 Transform:
@@ -3501,7 +3501,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Wait for \nAnother Partner..."
+  m_text: "Wait for \nPartner..."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4133,7 +4133,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Wait for Another Partner...
+  m_text: Wait for Partner...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
