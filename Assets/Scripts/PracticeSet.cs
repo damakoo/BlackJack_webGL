@@ -21,7 +21,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetHostPressed(bool _hostpressed)
     {
         HostPressed = _hostpressed;
-        _PhotonView.RPC("UpdateHostPressedOnAllClients", RpcTarget.Others, _hostpressed);
+        //_PhotonView.RPC("UpdateHostPressedOnAllClients", RpcTarget.Others, _hostpressed);
     }
     [PunRPC]
     void UpdateHostPressedOnAllClients(bool _hostpressed)
@@ -31,7 +31,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetClientPressed(bool _clientpressed)
     {
         ClientPressed = _clientpressed;
-        _PhotonView.RPC("UpdateClientPressedOnAllClients", RpcTarget.Others, _clientpressed);
+        //_PhotonView.RPC("UpdateClientPressedOnAllClients", RpcTarget.Others, _clientpressed);
     }
     [PunRPC]
     void UpdateClientPressedOnAllClients(bool _clientpressed)
@@ -41,7 +41,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetTimeLeft(float _timeleft)
     {
         TimeLeft = _timeleft;
-        _PhotonView.RPC("UpdateTimeLeftOnAllClients", RpcTarget.Others, _timeleft);
+        //_PhotonView.RPC("UpdateTimeLeftOnAllClients", RpcTarget.Others, _timeleft);
     }
     [PunRPC]
     void UpdateTimeLeftOnAllClients(float _timeleft)
@@ -52,7 +52,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetMySelectedBet(int bet)
     {
         MySelectedBet = bet;
-        _PhotonView.RPC("UpdateMySelectedBetOnAllClients", RpcTarget.Others, bet);
+        //_PhotonView.RPC("UpdateMySelectedBetOnAllClients", RpcTarget.Others, bet);
     }
     [PunRPC]
     void UpdateMySelectedBetOnAllClients(int bet)
@@ -63,7 +63,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetYourSelectedBet(int bet)
     {
         YourSelectedBet = bet;
-        _PhotonView.RPC("UpdateYourSelectedBetOnAllClients", RpcTarget.Others, bet);
+        //_PhotonView.RPC("UpdateYourSelectedBetOnAllClients", RpcTarget.Others, bet);
     }
     [PunRPC]
     void UpdateYourSelectedBetOnAllClients(int bet)
@@ -74,7 +74,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetMySelectedTime(float time, int trial)
     {
         MySelectedTime[trial] = time;
-        _PhotonView.RPC("UpdateMySelectedTimeOnAllClients", RpcTarget.Others, time, trial);
+        //_PhotonView.RPC("UpdateMySelectedTimeOnAllClients", RpcTarget.Others, time, trial);
     }
     [PunRPC]
     void UpdateMySelectedTimeOnAllClients(float time, int trial)
@@ -85,7 +85,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetYourSelectedTime(float time, int trial)
     {
         YourSelectedTime[trial] = time;
-        _PhotonView.RPC("UpdateYourSelectedTimeOnAllClients", RpcTarget.Others, time, trial);
+        //_PhotonView.RPC("UpdateYourSelectedTimeOnAllClients", RpcTarget.Others, time, trial);
     }
     [PunRPC]
     void UpdateYourSelectedTimeOnAllClients(float time, int trial)
@@ -96,7 +96,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetMySelectedCard(int card)
     {
         MySelectedCard = card;
-        _PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card);
+        //_PhotonView.RPC("UpdateMySelectedCardOnAllClients", RpcTarget.Others, card);
     }
     [PunRPC]
     void UpdateMySelectedCardOnAllClients(int _Number)
@@ -107,7 +107,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetYourSelectedCard(int card)
     {
         YourSelectedCard = card;
-        _PhotonView.RPC("UpdateYourSelectedCardOnAllClients", RpcTarget.Others, card);
+        //_PhotonView.RPC("UpdateYourSelectedCardOnAllClients", RpcTarget.Others, card);
     }
     [PunRPC]
     void UpdateYourSelectedCardOnAllClients(int _Number)
@@ -122,7 +122,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<List<int>> temp = _MyCardsPracticeList;
         MyCardsPracticeList = temp;
-        _PhotonView.RPC("UpdateMyCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsPracticeList));
+        //_PhotonView.RPC("UpdateMyCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsPracticeList));
     }
     [PunRPC]
     void UpdateMyCardsPracticeListOnAllClients(string serializeCards)
@@ -134,7 +134,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<List<int>> temp = _YourCardsPracticeList;
         YourCardsPracticeList = temp;
-        _PhotonView.RPC("UpdateYourCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsPracticeList));
+        //_PhotonView.RPC("UpdateYourCardsPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsPracticeList));
     }
     [PunRPC]
     void UpdateYourCardsPracticeListOnAllClients(string serializeCards)
@@ -146,7 +146,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<int> temp = FieldCardsPracticeList;
         FieldCardsPracticeList = temp;
-        _PhotonView.RPC("UpdateFieldCardsPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsPracticeList));
+        //_PhotonView.RPC("UpdateFieldCardsPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsPracticeList));
     }
     [PunRPC]
     void UpdateFieldCardsPracticeListOnAllClients(string serializeCards)
@@ -226,7 +226,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<List<int>> temp = _MyCardsSuitPracticeList;
         MyCardsSuitPracticeList = temp;
-        _PhotonView.RPC("UpdateMyCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsSuitPracticeList));
+        //_PhotonView.RPC("UpdateMyCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_MyCardsSuitPracticeList));
     }
     [PunRPC]
     void UpdateMyCardsSuitPracticeListOnAllClients(string serializeCards)
@@ -238,7 +238,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<List<int>> temp = _YourCardsSuitPracticeList;
         YourCardsSuitPracticeList = temp;
-        _PhotonView.RPC("UpdateYourCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsSuitPracticeList));
+        //_PhotonView.RPC("UpdateYourCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeCardList(_YourCardsSuitPracticeList));
     }
     [PunRPC]
     void UpdateYourCardsSuitPracticeListOnAllClients(string serializeCards)
@@ -250,7 +250,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     {
         List<int> temp = FieldCardsSuitPracticeList;
         FieldCardsSuitPracticeList = temp;
-        _PhotonView.RPC("UpdateFieldCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsSuitPracticeList));
+        //_PhotonView.RPC("UpdateFieldCardsSuitPracticeListOnAllClients", RpcTarget.Others, SerializeFieldCard(_FieldCardsSuitPracticeList));
     }
     [PunRPC]
     void UpdateFieldCardsSuitPracticeListOnAllClients(string serializeCards)
@@ -274,7 +274,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void SetBlackJackState(BlackJackStateList _BlackJackState)
     {
         BlackJackState = _BlackJackState;
-        _PhotonView.RPC("UpdateBlackJackStateListOnAllClients", RpcTarget.Others, SerializeBlackJackState(_BlackJackState));
+        //_PhotonView.RPC("UpdateBlackJackStateListOnAllClients", RpcTarget.Others, SerializeBlackJackState(_BlackJackState));
     }
     [PunRPC]
     void UpdateBlackJackStateListOnAllClients(string serializeCards)
@@ -376,7 +376,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void InitializeCard()
     {
         _BlackJackManager.InitializeCard();
-        _PhotonView.RPC("RPCInitializeCard", RpcTarget.Others);
+        //_PhotonView.RPC("RPCInitializeCard", RpcTarget.Others);
     }
     [PunRPC]
     void RPCInitializeCard()
@@ -387,7 +387,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void ReInitializeCard()
     {
         _BlackJackManager.ReInitializeCard();
-        _PhotonView.RPC("RPCReInitializeCard", RpcTarget.Others);
+        //_PhotonView.RPC("RPCReInitializeCard", RpcTarget.Others);
     }
     [PunRPC]
     void RPCReInitializeCard()
@@ -548,7 +548,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MoveToWaitForNextTrial(int _nowTrial)
     {
         _BlackJackManager.MoveToWaitForNextTrial(_nowTrial);
-        _PhotonView.RPC("RPCMoveToWaitForNextTrial", RpcTarget.Others, _nowTrial);
+        //_PhotonView.RPC("RPCMoveToWaitForNextTrial", RpcTarget.Others, _nowTrial);
     }
     [PunRPC]
     void RPCMoveToWaitForNextTrial(int _nowTrial)
@@ -560,7 +560,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MoveToShowMyCards(int hostorClient)
     {
         _BlackJackManager.MoveToShowMyCards(0);
-        _PhotonView.RPC("RPCMoveToShowMyCards", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMoveToShowMyCards", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMoveToShowMyCards()
@@ -572,7 +572,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MoveToSelectCards()
     {
         _BlackJackManager.MoveToSelectCards();
-        _PhotonView.RPC("RPCMoveToSelectCards", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMoveToSelectCards", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMoveToSelectCards()
@@ -583,7 +583,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MoveToSelectBet()
     {
         _BlackJackManager.MoveToSelectBet();
-        _PhotonView.RPC("RPCMoveToSelectBet", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMoveToSelectBet", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMoveToSelectBet()
@@ -594,7 +594,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MoveToShowResult()
     {
         _BlackJackManager.MoveToShowResult();
-        _PhotonView.RPC("RPCMoveToShowResult", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMoveToShowResult", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMoveToShowResult()
@@ -605,7 +605,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MakeReadyHost()
     {
        _BlackJackManager.MakeReadyHost();
-        _PhotonView.RPC("RPCMakeReadyHost", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMakeReadyHost", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMakeReadyHost()
@@ -616,7 +616,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void MakeReadyClient()
     {
         _BlackJackManager.MakeReadyClient();
-        _PhotonView.RPC("RPCMakeReadyClient", RpcTarget.Others);
+        //_PhotonView.RPC("RPCMakeReadyClient", RpcTarget.Others);
     }
     [PunRPC]
     void RPCMakeReadyClient()
@@ -627,7 +627,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void Restart()
     {
         _BlackJackManager.Restart();
-        _PhotonView.RPC("RPCRestart", RpcTarget.Others);
+        //_PhotonView.RPC("RPCRestart", RpcTarget.Others);
     }
     [PunRPC]
     void RPCRestart()
@@ -638,7 +638,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public void GameStartUi()
     {
         _BlackJackManager.GameStartUI();
-        _PhotonView.RPC("RPCGameStartUi", RpcTarget.Others);
+        //_PhotonView.RPC("RPCGameStartUi", RpcTarget.Others);
     }
     [PunRPC]
     void RPCGameStartUi()

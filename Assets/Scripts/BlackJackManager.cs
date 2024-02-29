@@ -71,7 +71,7 @@ public class BlackJackManager : MonoBehaviour
                 if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.BeforeStart)
                 {
                     StartingGame();
-                    if (_PracticeSet.HostPressed && _PracticeSet.ClientPressed)
+                    if (_PracticeSet.HostPressed)
                     {
                         PhotonMoveToWaitForNextTrial(nowTrial);
                         _PracticeSet.SetHostPressed(false);
@@ -135,7 +135,7 @@ public class BlackJackManager : MonoBehaviour
                 }
                 else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.Finished)
                 {
-                    if (_PracticeSet.HostPressed && _PracticeSet.ClientPressed)
+                    if (_PracticeSet.HostPressed)
                     {
                         PhotonRestart();
                     }
@@ -341,6 +341,7 @@ public class BlackJackManager : MonoBehaviour
     }
     public void MoveToShowResult()
     {
+        _PracticeSet.YourSelectedCard = Random.Range(0,4);
         CardListObject.SetActive(true);
         BetUi.SetActive(false);
         if (_PracticeSet.MySelectedCard != NOTSELCETEDNUMBER) _cardslist.MyCardsList[_PracticeSet.MySelectedCard].Clicked();

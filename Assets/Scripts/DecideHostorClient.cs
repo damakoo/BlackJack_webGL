@@ -13,43 +13,24 @@ public class DecideHostorClient : MonoBehaviour
     bool _DecideHostorClient = false;
     public bool isConnecting = false;
     public PracticeSet _practiceSet { get; set; }
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (isConnecting)
-        {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !_DecideHostorClient)
-            {
-                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Host;
-                _DecideHostorClient = true;
-            }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && !_DecideHostorClient)
-            {
-                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Client;
-                _DecideHostorClient = true;
-            }
+        _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Host;
+    }
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount > 1 && _DecideHostorClient)
+    private void Update()
+    {
+        if(_practiceSet != null)
+        {
+            _BlackJackManager.SetPracticeSet(_practiceSet);
+            if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Host)
             {
-                if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Client)
-                {
-                    PhotonView[] photonviews = FindObjectsOfType<PhotonView>();
-                    foreach (var _photonview in photonviews)
-                    {
-                        if (!_photonview.IsMine) _practiceSet = _photonview.gameObject.GetComponent<PracticeSet>();
-                    }
-                }
-                _BlackJackManager.SetPracticeSet(_practiceSet);
-                if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Host)
-                {
-                    _BlackJackManager.UpdateParameter();
-                    _BlackJackManager.PhotonGameStartUI();
-                }
-                WaitforAnother.SetActive(false);
-                this.gameObject.SetActive(false);
+                _BlackJackManager.UpdateParameter();
+                _BlackJackManager.PhotonGameStartUI();
             }
+            WaitforAnother.SetActive(false);
+            this.gameObject.SetActive(false);
+
         }
     }
 }
-
