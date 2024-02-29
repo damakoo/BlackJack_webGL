@@ -23,6 +23,7 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] GameObject CardListObject;
     [SerializeField] DecideHostorClient _decideHostorClient;
     [SerializeField] GameObject StartingUi;
+    [SerializeField] GameObject StartingUi_button;
     [SerializeField] GameObject WaitforStartUi;
     [SerializeField] GameObject _SceneReloaderHost;
     [SerializeField] GameObject _SceneReloaderClient;
@@ -267,6 +268,7 @@ public class BlackJackManager : MonoBehaviour
     public void GameStartUI()
     {
         StartingUi.SetActive(true);
+        StartingUi_button.SetActive(true);
     }
     public void PhotonGameStartUI()
     {
@@ -293,6 +295,7 @@ public class BlackJackManager : MonoBehaviour
                 }
                 WaitforStartUi.SetActive(true);
                 StartingUi.SetActive(false);
+                StartingUi_button.SetActive(false);
             }
         }
     }

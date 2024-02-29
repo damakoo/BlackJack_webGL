@@ -1346,6 +1346,7 @@ MonoBehaviour:
   CardListObject: {fileID: 1047988030}
   _decideHostorClient: {fileID: 329302854}
   StartingUi: {fileID: 1090798328}
+  StartingUi_button: {fileID: 2107041519}
   WaitforStartUi: {fileID: 1557185781}
   _SceneReloaderHost: {fileID: 1875103795}
   _SceneReloaderClient: {fileID: 284570082}
