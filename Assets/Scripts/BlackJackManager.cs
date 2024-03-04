@@ -375,7 +375,7 @@ public class BlackJackManager : MonoBehaviour
         if (nowTrial == _PracticeSet.TrialAll)
         {
             _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;
-            FinishUI.text = "Finished! \n ScoreAll:" + ReturnSum(ScoreList).ToString() + "/" + ReturnSum(MaxScoreList).ToString() + "\n" + "Trial: " + _blackJackRecorder.Trial.ToString() + "/10";
+            FinishUI.text = "Finished! \n ScoreAll:" + ReturnSum(ScoreList).ToString() + "/" + ReturnSum(MaxScoreList).ToString() + "\n" + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString();
             //_blackJackRecorder.WriteResult();
             _blackJackRecorder.ExportCsv();
             if (_blackJackRecorder.Trial == NumberofSet)
