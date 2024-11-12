@@ -1336,7 +1336,7 @@ MonoBehaviour:
   ShowMyCardsTime: 0
   ResultsTime: 8
   WaitingTime: 6
-  BetTime: 8
+  BetTime: 0
   NumberofSet: 10
   FinishUI: {fileID: 1642538915}
   _blackJackRecorder: {fileID: 670548090}
