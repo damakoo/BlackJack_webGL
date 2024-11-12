@@ -317,6 +317,7 @@ public class BlackJackManager : MonoBehaviour
     public void PhotonMoveToSelectBet()
     {
         _PracticeSet.MoveToSelectBet();
+        PhotonMoveToShowResult();
     }
     public void MoveToSelectBet()
     {
